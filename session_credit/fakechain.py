@@ -23,6 +23,17 @@ class FakeChain:
             raise ValueError("did is required")
         self._liquid[did] = self.balance(did) + _parse_amount(amount)
 
+    def debit(self, did: str, amount: int) -> None:
+        """Remove liquid funds. Rejects when the balance cannot cover it."""
+        if type(amount) is not int or isinstance(amount, bool) or amount <= 0:
+            raise ValueError("amount must be a positive integer")
+        if not isinstance(did, str) or did == "":
+            raise ValueError("did is required")
+        liquid = self._liquid.get(did, 0)
+        if liquid < amount:
+            raise ValueError("insufficient liquid")
+        self._liquid[did] = liquid - amount
+
     def balance(self, did: str) -> int:
         """Liquid balance. Unknown accounts are 0. Escrow is not included."""
         return self._liquid.get(did, 0)
@@ -54,6 +65,16 @@ class FakeChain:
             raise ValueError("empty escrow")
         self._escrow[key_id] = 0
         self._liquid[did] = self._liquid.get(did, 0) + amount
+        return amount
+
+    def void_escrow(self, key_id: str) -> int:
+        """Drop an escrow without crediting anyone. Used when a draw is a loss."""
+        if not isinstance(key_id, str) or key_id == "":
+            raise ValueError("key_id is required")
+        amount = self._escrow.get(key_id, 0)
+        if amount <= 0:
+            raise ValueError("empty escrow")
+        self._escrow[key_id] = 0
         return amount
 
 

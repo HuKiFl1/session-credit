@@ -25,7 +25,23 @@ _SIG_DOMAIN = b"session-credit-sig|"
 _ED25519_PREFIX = bytes((0xED, 0x01))
 
 ENVELOPE_KEYS = frozenset({"t", "from", "ts", "n", "b", "cid", "sig"})
-TYPES = frozenset({"offer", "accept", "member", "receipt"})
+TYPES = frozenset(
+    {
+        "offer",
+        "accept",
+        "member",
+        "receipt",
+        "market",
+        "supply",
+        "withdraw",
+        "job",
+        "borrow",
+        "vault",
+        "deposit",
+        "redeem",
+    }
+)
+ZERO_CID = "0x" + ("0" * 64)
 
 OFFER_KEYS = frozenset(
     {
@@ -42,6 +58,27 @@ OFFER_KEYS = frozenset(
 ACCEPT_KEYS = frozenset({"offer", "job"})
 MEMBER_KEYS = frozenset({"member", "expiry"})
 RECEIPT_KEYS = frozenset({"loan", "job", "lender_amt", "borrower_amt", "session"})
+MARKET_KEYS = frozenset(
+    {
+        "model",
+        "max_latency_ms",
+        "flops",
+        "confidential",
+        "lltv_bps",
+        "charge_bps",
+        "repay_window_ms",
+        "draw_window_ms",
+        "guild",
+        "curator",
+    }
+)
+SUPPLY_KEYS = frozenset({"market", "amount"})
+WITHDRAW_KEYS = frozenset({"market", "shares"})
+JOB_KEYS = frozenset({"model", "max_latency_ms", "flops", "confidential", "budget"})
+BORROW_KEYS = frozenset({"market", "job", "fee", "member"})
+VAULT_KEYS = frozenset()
+DEPOSIT_KEYS = frozenset({"vault", "amount"})
+REDEEM_KEYS = frozenset({"vault", "shares"})
 
 
 class SchemaError(ValueError):
@@ -116,6 +153,31 @@ def _cid(value: Any, field: str) -> str:
     return value
 
 
+def _positive_int(value: Any, field: str) -> int:
+    if type(value) is not int or isinstance(value, bool) or value <= 0:
+        raise SchemaError(f"{field} must be a positive integer")
+    return value
+
+
+def _bps(value: Any, field: str, lo: int, hi: int) -> int:
+    if type(value) is not int or isinstance(value, bool) or not lo <= value <= hi:
+        raise SchemaError(f"{field} must be an integer from {lo} to {hi}")
+    return value
+
+
+def _did(value: Any, field: str) -> str:
+    if not isinstance(value, str) or not _DID.match(value):
+        raise SchemaError(f"{field} must be an ed25519 did:key")
+    return value
+
+
+def _positive_amount(value: Any, field: str) -> str:
+    amount = _amount(value, field)
+    if amount == "0":
+        raise SchemaError(f"{field} must be positive")
+    return amount
+
+
 def validate_body(kind: str, body: Any) -> dict[str, Any]:
     if kind not in TYPES:
         raise SchemaError("unknown type")
@@ -126,6 +188,14 @@ def validate_body(kind: str, body: Any) -> dict[str, Any]:
         "accept": ACCEPT_KEYS,
         "member": MEMBER_KEYS,
         "receipt": RECEIPT_KEYS,
+        "market": MARKET_KEYS,
+        "supply": SUPPLY_KEYS,
+        "withdraw": WITHDRAW_KEYS,
+        "job": JOB_KEYS,
+        "borrow": BORROW_KEYS,
+        "vault": VAULT_KEYS,
+        "deposit": DEPOSIT_KEYS,
+        "redeem": REDEEM_KEYS,
     }[kind]
     if set(body) != expected:
         raise SchemaError(f"{kind} fields must be exactly {sorted(expected)}")
@@ -146,10 +216,47 @@ def validate_body(kind: str, body: Any) -> dict[str, Any]:
         _cid(body["offer"], "offer")
         _cid(body["job"], "job")
     elif kind == "member":
-        if not _DID.match(body["member"]):
-            raise SchemaError("member must be an ed25519 did:key")
-        if type(body["expiry"]) is not int or isinstance(body["expiry"], bool) or body["expiry"] <= 0:
-            raise SchemaError("expiry must be a positive integer")
+        _did(body["member"], "member")
+        _positive_int(body["expiry"], "expiry")
+    elif kind == "market":
+        _cid(body["model"], "model")
+        _positive_int(body["max_latency_ms"], "max_latency_ms")
+        _positive_int(body["flops"], "flops")
+        if type(body["confidential"]) is not bool:
+            raise SchemaError("confidential must be a boolean")
+        _bps(body["lltv_bps"], "lltv_bps", 1, 10_000)
+        _bps(body["charge_bps"], "charge_bps", 0, 10_000)
+        _positive_int(body["repay_window_ms"], "repay_window_ms")
+        _positive_int(body["draw_window_ms"], "draw_window_ms")
+        if type(body["guild"]) is not bool:
+            raise SchemaError("guild must be a boolean")
+        _did(body["curator"], "curator")
+    elif kind == "supply":
+        _cid(body["market"], "market")
+        _positive_amount(body["amount"], "amount")
+    elif kind == "withdraw":
+        _cid(body["market"], "market")
+        _positive_amount(body["shares"], "shares")
+    elif kind == "job":
+        _cid(body["model"], "model")
+        _positive_int(body["max_latency_ms"], "max_latency_ms")
+        _positive_int(body["flops"], "flops")
+        if type(body["confidential"]) is not bool:
+            raise SchemaError("confidential must be a boolean")
+        _positive_amount(body["budget"], "budget")
+    elif kind == "borrow":
+        _cid(body["market"], "market")
+        _cid(body["job"], "job")
+        _positive_amount(body["fee"], "fee")
+        _cid(body["member"], "member")
+    elif kind == "vault":
+        pass
+    elif kind == "deposit":
+        _cid(body["vault"], "vault")
+        _positive_amount(body["amount"], "amount")
+    elif kind == "redeem":
+        _cid(body["vault"], "vault")
+        _positive_amount(body["shares"], "shares")
     else:
         _cid(body["loan"], "loan")
         _cid(body["job"], "job")

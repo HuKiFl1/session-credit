@@ -64,6 +64,36 @@ def issue(chain: FakeChain, offer: dict, borrower: str, now: int) -> str:
     return key_id
 
 
+def open_session(
+    chain: FakeChain,
+    key_id: str,
+    lender: str,
+    borrower: str,
+    draw_expiry: int,
+    pinned: dict,
+) -> None:
+    """Register a session key whose escrow is already locked.
+
+    ``pay``, ``transfer``, and ``expire`` then apply. The borrower is recorded
+    and is not paid.
+    """
+    _chain(chain)
+    if not isinstance(key_id, str) or key_id == "":
+        raise DrawError("unknown session key")
+    if not isinstance(lender, str) or lender == "" or not isinstance(borrower, str) or borrower == "":
+        raise DrawError("lender and borrower are required")
+    if type(draw_expiry) is not int or isinstance(draw_expiry, bool) or draw_expiry <= 0:
+        raise DrawError("draw_expiry must be a positive integer")
+    if not isinstance(pinned, dict) or set(pinned) != set(_REQUEST_FIELDS):
+        raise DrawError("pinned request fields are wrong")
+    book = _book(chain)
+    if key_id in book:
+        raise DrawError("session key already issued")
+    if chain.escrow_of(key_id) <= 0:
+        raise DrawError("session escrow is empty")
+    book[key_id] = _Session(lender, borrower, draw_expiry, pinned, "open")
+
+
 def pay(chain: FakeChain, key_id: str, request: dict, miner: str, now: int) -> None:
     """Spend the session key: send its escrow to the miner.
 

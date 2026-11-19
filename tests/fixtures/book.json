@@ -1,0 +1,26 @@
+[
+  {
+    "text": "{\"t\":\"offer\",\"from\":\"did:key:z6MkoS23JmqE4nqiWFk6fGtdG8ZQxD92EJScALaMx3yFSR5L\",\"ts\":1700000000,\"n\":\"0000000000000001\",\"b\":{\"model\":\"0xc6239c8111dafe9794a799481dd6d509ed58a3b2191d103765f04232241f51e5\",\"max_latency_ms\":1000,\"flops\":1000,\"confidential\":false,\"fee\":\"10\",\"charge\":\"1\",\"draw_expiry\":1700000100,\"repay_deadline\":1700000200},\"cid\":\"0x7b7559e37cdb5d9d51129b7baf9f79d0d1581670aa57a0924d92799b3b9dbd8a\",\"sig\":\"PdQcrbW0tnWcubA6h3GN7F7G4cn0zadzHEfb_K2gFohfpVWmYS6yiJIpc3-VsLDVls6GnXugaaOaZ9ABGIgdDw\"}"
+  },
+  {
+    "text": "{\"t\":\"offer\",\"from\":\"did:key:z6MkssAo1ouc15BskHx8c5TBUL1BhHfcGbVExnCJtwB1uEto\",\"ts\":1700000000,\"n\":\"0000000000000002\",\"b\":{\"model\":\"0x4e3bcd82063ebbfc428921874dc9e075ee255ab6e805c9010542856bc60978df\",\"max_latency_ms\":2000,\"flops\":1000,\"confidential\":true,\"fee\":\"10\",\"charge\":\"1\",\"draw_expiry\":1700000100,\"repay_deadline\":1700000200},\"cid\":\"0xb31825d31e007d1a2145406504d02abead9339e9400aabd7eadfbd1c5dbd7f65\",\"sig\":\"crYm7q4CnfXi2JsRSJv9Q6b9CndG19JXyaunrC2FpyAxGywKd8KUWA9GfosPSBF79u9F7Bkiuf7OBMTtyHoSBw\"}"
+  },
+  {
+    "text": "{\"t\":\"accept\",\"from\":\"did:key:z6Mkm6AfsTU9acqLN39DYoKnjb3TqMb6kFrWsYZSofrMGFLa\",\"ts\":1700000000,\"n\":\"0000000000000003\",\"b\":{\"offer\":\"0xb31825d31e007d1a2145406504d02abead9339e9400aabd7eadfbd1c5dbd7f65\",\"job\":\"0x7d94347d92ca1b5b55d7d2cd321b0359696905a4bc37d039f67ca8d60c0e7719\"},\"cid\":\"0xa66bb8fea26d2aa37cf06c2fccd55c60ff5eea58f208a657404c00df18d7d464\",\"sig\":\"PNYgSKrFG2VRug-Gt9l_QipN4FHsOr8aYciCdainUfs4aml5IZZhMYTwPwAhrnf_02RpiEuCaMViT6kBnaowDw\"}"
+  },
+  {
+    "text": "{\"t\":\"accept\",\"from\":\"did:key:z6Mkm6AfsTU9acqLN39DYoKnjb3TqMb6kFrWsYZSofrMGFLa\",\"ts\":1700000000,\"n\":\"0000000000000004\",\"b\":{\"offer\":\"0xb31825d31e007d1a2145406504d02abead9339e9400aabd7eadfbd1c5dbd7f65\",\"job\":\"0x3c59da5b86cde25fe1a26f82429bc5e87fec444658f401fca9b85b8f6d60819d\"},\"cid\":\"0xd55187d27c0924613400ca0f16499def8597a0c88fd6a8c4ca1d2bc2b5463268\",\"sig\":\"XCvWtHhjjUP58iVWSRVqIZiTaZeOGohVWEA78wZMqndcAOqflTHAp1Vu1gLY3ZvY7Xi1R7WQ4M1iUC2JHsxfDA\"}"
+  },
+  {
+    "text": "{\"t\":\"offer\",\"from\":\"did:key:z6MkoS23JmqE4nqiWFk6fGtdG8ZQxD92EJScALaMx3yFSR5L\",\"ts\":1700000000,\"n\":\"0000000000000005\",\"b\":{\"model\":\"0x2abef0c20e73da8ed03004588ee012071e709c073535ecf5b57553d2fb18e7db\",\"max_latency_ms\":3000,\"flops\":1000,\"confidential\":false,\"fee\":\"11\",\"charge\":\"1\",\"draw_expiry\":1700000100,\"repay_deadline\":1700000200},\"cid\":\"0x871692db91eb6dc115b72ea35326779a337137c889a5064300abfb7ad857500a\",\"sig\":\"1J_cBrM62ga8WjsXs5GuevDgfnkuqTHnCRw5XMlAYgXQuEjjVDTSb6Vw5NK2YEbZFlRYd5Yzka-52EkSc565BA\"}"
+  },
+  {
+    "text": "hello agents"
+  },
+  {
+    "text": "{\"t\":\"member\",\"from\":\"did:key:z6MkoS23JmqE4nqiWFk6fGtdG8ZQxD92EJScALaMx3yFSR5L\",\"ts\":1700000000,\"n\":\"0000000000000006\",\"b\":{\"member\":\"did:key:z6Mkv8F4ZXwRK4ChwJ2T7Gi7uexaqLtvJUozjaJhpeTDCmzE\",\"expiry\":1700000050},\"cid\":\"0x043e4a3eb1c130e84f0fffefab5e27ac2cf29265b106260e38e4f683e6310969\",\"sig\":\"Z7vEKFq2VTAjjSRhCJakWgIVVBGZiqKuR5VkJ4o_le78xUIU2jCzdhyS6AV4NqEufuUp-S9k3O7sgtVqOrZ7DA\"}"
+  },
+  {
+    "text": "{\"t\":\"receipt\",\"from\":\"did:key:z6MkssAo1ouc15BskHx8c5TBUL1BhHfcGbVExnCJtwB1uEto\",\"ts\":1700000000,\"n\":\"0000000000000007\",\"b\":{\"loan\":\"0xb31825d31e007d1a2145406504d02abead9339e9400aabd7eadfbd1c5dbd7f65\",\"job\":\"0x488d07234b0de39557abe920098580b7a6a6093b35ab8faec02aa7f561b4b437\",\"lender_amt\":\"11\",\"borrower_amt\":\"0\",\"session\":\"0x6a35009cee140c49ac9f7681c6d2de7d70550eb4a38b42176db2293ef3bb633d\"},\"cid\":\"0x17beef69cb169c565c0860efc04fdd85dc8ed586478fe94a6d2b33ce7ebc6712\",\"sig\":\"9ZGlabFn3Dlaw76XOSEF96-wf4fPh9lJxmBvqtimTzwzq2vBWMX1_tvBiqpqZZJL-0M9LqmWd7MYuD5KAlEQAQ\"}"
+  }
+]
